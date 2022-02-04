@@ -41,8 +41,13 @@ const questions = [{
 },
 {
     type: "input",
-    name: "questions",
-    message: "What are the questions?"
+    name: "github",
+    message: "What is your github?"
+},
+{
+    type: "input",
+    name: "email",
+    message: "What is your email?"
 }];
 
 // TODO: Create a function to write README file
@@ -54,16 +59,56 @@ function writeToFile(fileName, data) {
 function init() {
     inquirer.prompt(questions)
     .then(({
-        title, description, toc, installation, usage, contribution, test, questions
+        title, description, toc, installation, usage, contribution, test, github, email
     }) => {
-        console.log(title, description);
+        console.log(toc)
+        var tableOfContents = getTableOfContents(toc);
         const text = `# ${title}
 
-## ${description}`;
+## ${description}
+## Table of Contents (Optional)
+
+${tableOfContents}
+
+## Installation
+
+${installation}
+
+## Usage
+
+${usage}
+
+## How to Contribute
+${contribution}
+
+## Tests
+${test}
+
+## Contuibutions
+${contribution}
+
+## Questions-Contact me below
+<a href=https://github.com/${github}>My github ${github}</a> <br>
+<a href=mailto:${email}>${email}</a>
+
+`
+
 
 writeToFile("./dist/README.md", text)
     });
 }
 
+const getTableOfContents = function(toc) {
+    if(!toc) {
+        return ""
+    }
+    var sections = toc.split(" ");
+    var tableOfContents = "";
+    for (var i = 0; i < sections.length; i ++) {
+        tableOfContents += `- [${sections[i]}](#${sections[i]})\n`
+    }
+    console.log(tableOfContents);
+    return tableOfContents;
+}
 // Function call to initialize app
 init();
