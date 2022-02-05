@@ -1,6 +1,7 @@
 // TODO: Include packages needed for this application
 const inquirer = require("inquirer");
 const fs = require ("fs");
+const util = require("./utils/generateMarkdown");
 
 
 // TODO: Create an array of questions for user input
@@ -48,6 +49,11 @@ const questions = [{
     type: "input",
     name: "email",
     message: "What is your email?"
+},{
+    type: "list",
+    name: "license",
+    message: "What is the license?",
+    choices: ["apache", "bsd", "mit"]
 }];
 
 // TODO: Create a function to write README file
@@ -59,10 +65,11 @@ function writeToFile(fileName, data) {
 function init() {
     inquirer.prompt(questions)
     .then(({
-        title, description, toc, installation, usage, contribution, test, github, email
+        title, description, toc, installation, usage, contribution, test, github, email, license
     }) => {
         console.log(toc)
         var tableOfContents = getTableOfContents(toc);
+        var licenseText = util(license)
         const text = `# ${title}
 
 ## ${description}
@@ -90,6 +97,9 @@ ${contribution}
 ## Questions-Contact me below
 <a href=https://github.com/${github}>My github ${github}</a> <br>
 <a href=mailto:${email}>${email}</a>
+
+## License
+${licenseText}
 
 `
 
